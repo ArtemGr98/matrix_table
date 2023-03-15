@@ -1,11 +1,11 @@
 import {Dispatch} from "react";
-import {ActionCellsT, ADD_CELLS, Cell, CellsArr} from "./reducers/cellsReducer";
-import {ActionSumRowsT, SUM_ALL_ROWS} from "./reducers/sumRowsReducer";
+import {ActionCellsT, ADD_ROWS, Cell, RowsArrT} from "./reducers/cellsReducer";
+import {ActionSumRowT, SUM_ALL_ROW} from "./reducers/sumRowReducer";
 import {ActionAverageValueT, AVERAGE_ALL_COLUMNS} from "./reducers/averageValReducer";
 
 export type DispatchesT = {
     dispatchCells: Dispatch<ActionCellsT>,
-    dispatchSumRows: Dispatch<ActionSumRowsT>,
+    dispatchSumRow: Dispatch<ActionSumRowT>,
     dispatchAveragesValue: Dispatch<ActionAverageValueT>
 }
 
@@ -16,17 +16,17 @@ export const generateCellData = (
 
     const totalRowArr = Array.from({length: row}, (_, i) => i)
 
-    const cellArr: CellsArr = []
+    const cellArr: RowsArrT = []
 
     totalRowArr.forEach(rowIndex => {
         cellArr.push(generateRow(column))
     })
 
-    const {dispatchCells, dispatchAveragesValue, dispatchSumRows} = dispatches
+    const {dispatchCells, dispatchAveragesValue, dispatchSumRow} = dispatches
 
-    dispatchCells({type: ADD_CELLS, payload: cellArr})
-    dispatchSumRows({type: SUM_ALL_ROWS, payload: {cells: cellArr}})
-    dispatchAveragesValue({type: AVERAGE_ALL_COLUMNS, payload: {cells: cellArr, column}})
+    dispatchCells({type: ADD_ROWS, payload: cellArr})
+    dispatchSumRow({type: SUM_ALL_ROW, payload: {cells: cellArr}})
+    dispatchAveragesValue({type: AVERAGE_ALL_COLUMNS, payload: {cells: cellArr, columnCount: column}})
 }
 
 export function generateRow(columnCount: number) {

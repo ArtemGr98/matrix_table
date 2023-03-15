@@ -9,8 +9,8 @@ function App() {
         <InputsAgrContextProvider>
             <div className="App">
                 <div>
-                    <InputArg minValue={0} maxValue={100} name="row"/>
-                    <InputArg minValue={0} maxValue={100} name="column"/>
+                    <InputArg minValue={0} maxValue={100} name="rowCount"/>
+                    <InputArg minValue={0} maxValue={100} name="columnCount"/>
                     {/*<InputArg />*/}
                 </div>
 

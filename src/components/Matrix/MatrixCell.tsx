@@ -17,12 +17,12 @@ const MatrixCell: FC<MatrixCellPropsT> = memo(({dataCell, dispatches}) => {
     const {id, amount} = dataCell
 
     const handleIncrementValue = () => {
-        const {dispatchAveragesValue, dispatchSumRows, dispatchCells} = dispatches
+        const {dispatchAveragesValue, dispatchSumRow, dispatchCells} = dispatches
         dispatchCells({
             type: INCREMENT_CELL_AMOUNT,
             payload: {
                 cell: {id, amount: amount + 1},
-                dispatches: {dispatchSumRows, dispatchAveragesValue}
+                dispatches: {dispatchSumRow, dispatchAveragesValue}
             }
         })
     }

@@ -1,10 +1,9 @@
 import {Dispatch} from "react";
-import {ActionSumRowsT, SUM_ROW} from "./sumRowsReducer";
+import {ActionSumRowT, SUM_ROW} from "./sumRowReducer";
 import {ActionAverageValueT, AVERAGE_ALL_COLUMNS, AVERAGE_COLUMN} from "./averageValReducer";
-import {ActionInputsAgrT} from "../../App/InputsAgrContext";
 import {generateRow} from "../utils";
 
-export const ADD_CELLS = "ADD_CELLS"
+export const ADD_ROWS = "ADD_ROWS"
 export const INCREMENT_CELL_AMOUNT = "INCREMENT_CELL_AMOUNT"
 export const DELETE_ROW = "DELETE_ROW"
 export const ADD_ROW = "ADD_ROW"
@@ -14,18 +13,18 @@ export type Cell = {
     amount: number
 }
 
-export type CellsArr = Cell[][]
+export type RowsArrT = Cell[][]
 
-export type ActionAddCells = {
-    type: typeof ADD_CELLS,
-    payload: CellsArr
+export type ActionAddRows = {
+    type: typeof ADD_ROWS,
+    payload: RowsArrT
 }
-export type ActionChangeCells = {
+export type ActionIncrementCellAmount = {
     type: typeof INCREMENT_CELL_AMOUNT,
     payload: {
         cell: Cell,
         dispatches: {
-            dispatchSumRows: Dispatch<ActionSumRowsT>,
+            dispatchSumRow: Dispatch<ActionSumRowT>,
             dispatchAveragesValue: Dispatch<ActionAverageValueT>
         }
     }
@@ -33,10 +32,9 @@ export type ActionChangeCells = {
 export type ActionDeleteRow = {
     type: typeof DELETE_ROW,
     payload: {
-        indexRow: number,
+        rowIndex: number,
         dispatches: {
-            dispatchAveragesValue: Dispatch<ActionAverageValueT>,
-            dispatchInputsArg: Dispatch<ActionInputsAgrT>
+            dispatchAveragesValue: Dispatch<ActionAverageValueT>
         }
     }
 }
@@ -46,26 +44,25 @@ export type ActionAddRow = {
         columnCount: number
         dispatches: {
             dispatchAveragesValue: Dispatch<ActionAverageValueT>,
-            dispatchSumRows: Dispatch<ActionSumRowsT>
+            dispatchSumRow: Dispatch<ActionSumRowT>
         }
     }
 }
-export type ActionCellsT = ActionAddCells | ActionChangeCells | ActionDeleteRow | ActionAddRow
+export type ActionCellsT = ActionAddRows | ActionIncrementCellAmount | ActionDeleteRow | ActionAddRow
 
 
-export const cellsInitState: CellsArr = [[{id: 0, amount: 0}]]
+export const cellsInitState: RowsArrT = [[{id: 0, amount: 0}]]
 
-export const cellsReducer = (state: CellsArr, {type, payload}: ActionCellsT) => {
+export const cellsReducer = (state: RowsArrT, {type, payload}: ActionCellsT) => {
     const newState = [...state]
 
 
     switch (type) {
-        case ADD_CELLS:
+        case ADD_ROWS:
             return payload
 
-        case INCREMENT_CELL_AMOUNT:
-
-            const {dispatchAveragesValue, dispatchSumRows} = payload.dispatches
+        case INCREMENT_CELL_AMOUNT: {
+            const {dispatchAveragesValue, dispatchSumRow} = payload.dispatches
             const {id, amount} = payload.cell
 
             const rowIndex = state.findIndex((row) => row.some((cell) => cell.id === id))
@@ -88,15 +85,15 @@ export const cellsReducer = (state: CellsArr, {type, payload}: ActionCellsT) => 
                 amount,
             }
 
-            dispatchSumRows({type: SUM_ROW, payload: {id: rowIndex, cells: newState[rowIndex]}})
-            dispatchAveragesValue({type: AVERAGE_COLUMN, payload: {cells: newState, column: columnIndex}})
-
+            dispatchSumRow({type: SUM_ROW, payload: {id: rowIndex, cells: newState[rowIndex]}})
+            dispatchAveragesValue({type: AVERAGE_COLUMN, payload: {cells: newState, columnCount: columnIndex}})
+        }
             return newState
 
         case DELETE_ROW:
-            const {indexRow, dispatches} = payload
-            newState.splice(indexRow, 1)
-            dispatches.dispatchAveragesValue({type: AVERAGE_ALL_COLUMNS, payload: {cells: newState, column: newState[0].length}})
+            const {rowIndex, dispatches} = payload
+            newState.splice(rowIndex, 1)
+            dispatches.dispatchAveragesValue({type: AVERAGE_ALL_COLUMNS, payload: {cells: newState, columnCount: newState[0].length}})
             // dispatches.dispatchInputsArg({})
             return newState
 

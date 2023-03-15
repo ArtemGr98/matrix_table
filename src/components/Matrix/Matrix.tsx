@@ -3,21 +3,21 @@ import {InputsAgrContext} from "../App/InputsAgrContext"
 import MatrixCell from "./MatrixCell"
 import './Matrix.scss'
 
-import {sumRowInitState, sumRowsReducer} from "./reducers/sumRowsReducer"
+import {sumRowInitState, sumRowReducer} from "./reducers/sumRowReducer"
 import {generateCellData} from "./utils"
 import {ADD_ROW, cellsInitState, cellsReducer, DELETE_ROW} from "./reducers/cellsReducer"
 import {averageInitState, averageValReducer} from "./reducers/averageValReducer";
 
 const Matrix = () => {
-    const [{column, row, closestValues}, dispatchInputsArg] = useContext(InputsAgrContext)
+    const [{columnCount, rowCount, closestValues}, dispatchInputsArg] = useContext(InputsAgrContext)
 
     const [cells, dispatchCells] = useReducer(cellsReducer, cellsInitState)
-    const [sumRows, dispatchSumRows] = useReducer(sumRowsReducer, sumRowInitState)
+    const [sumsRow, dispatchSumRow] = useReducer(sumRowReducer, sumRowInitState)
     const [averagesValue, dispatchAveragesValue] = useReducer(averageValReducer, averageInitState)
 
     useEffect(() => {
-        generateCellData(column, row, {dispatchCells, dispatchSumRows, dispatchAveragesValue})
-    }, [column, row])
+        generateCellData(columnCount, rowCount, {dispatchCells, dispatchSumRow: dispatchSumRow, dispatchAveragesValue})
+    }, [columnCount, rowCount])
 
     // useEffect(() => {
     //     dispatchSumRows({type: "SUM_ROWS", payload: {cells}})
@@ -30,23 +30,23 @@ const Matrix = () => {
                 <tbody>
                 {cells.map((row, rowIndex) => <tr className="matrix__column" key={'row' + rowIndex}>
                     {row.map(({id, amount}, index) => {
-                        return index !== column - 1 ?
+                        return index !== columnCount - 1 ?
                             <td key={'col' + id}>
                                 <MatrixCell
                                     dataCell={{id, amount}}
-                                    dispatches={{dispatchCells, dispatchSumRows, dispatchAveragesValue}}/>
+                                    dispatches={{dispatchCells, dispatchSumRow, dispatchAveragesValue}}/>
                             </td> :
                             <td key={'col' + id} style={{display: "flex"}}>
                                 <MatrixCell
                                     key={'col' + id} dataCell={{id, amount}}
-                                    dispatches={{dispatchCells, dispatchSumRows, dispatchAveragesValue}}/>
-                                <input type="number" className="matrix__cell" readOnly value={sumRows[rowIndex]}/>
+                                    dispatches={{dispatchCells, dispatchSumRow, dispatchAveragesValue}}/>
+                                <input type="number" className="matrix__cell" readOnly value={sumsRow[rowIndex]}/>
                                 <button onClick={() => dispatchCells(
                                     {
                                         type: DELETE_ROW,
                                         payload: {
-                                            indexRow: rowIndex,
-                                            dispatches: {dispatchAveragesValue, dispatchInputsArg}
+                                            rowIndex,
+                                            dispatches: {dispatchAveragesValue}
                                         }
                                     })}>x
                                 </button>
@@ -62,13 +62,13 @@ const Matrix = () => {
                 </tr>
                 </tbody>
             </table>
-            <button disabled={!(row && column)} onClick={() =>
+            <button disabled={!(rowCount && columnCount)} onClick={() =>
                 dispatchCells({
                     type: ADD_ROW,
                     payload: {
-                        columnCount: column,
+                        columnCount: columnCount,
                         dispatches: {
-                            dispatchSumRows,
+                            dispatchSumRow,
                             dispatchAveragesValue
                         }
                     }

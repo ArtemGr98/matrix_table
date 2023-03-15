@@ -1,15 +1,15 @@
-import {Cell, CellsArr} from "./cellsReducer"
+import {Cell, RowsArrT} from "./cellsReducer"
 
-export const SUM_ALL_ROWS = "SUM_ALL_ROWS"
+export const SUM_ALL_ROW = "SUM_ALL_ROWS"
 export const SUM_ROW = "SUM_ROW"
 
-export type SumRowsT = {
+export type SumRowT = {
     [index: number]: number
 }
-type ActionSumAllRows = {
-    type: typeof SUM_ALL_ROWS,
+type ActionSumAllRow = {
+    type: typeof SUM_ALL_ROW,
     payload: {
-        cells: CellsArr
+        cells: RowsArrT
     }
 }
 type ActionSumRow = {
@@ -19,14 +19,14 @@ type ActionSumRow = {
         cells: Cell[]
     }
 }
-export type ActionSumRowsT = ActionSumAllRows | ActionSumRow
-export const sumRowInitState: SumRowsT = {0: 1}
+export type ActionSumRowT = ActionSumAllRow | ActionSumRow
+export const sumRowInitState: SumRowT = {0: 1}
 
-export const sumRowsReducer = (state: SumRowsT, {type, payload}: ActionSumRowsT) => {
-    const newSum: SumRowsT = {...state}
-    // console.log(payload.cells)
+export const sumRowReducer = (state: SumRowT, {type, payload}: ActionSumRowT) => {
+    const newSum: SumRowT = {...state}
+
     switch (type) {
-        case SUM_ALL_ROWS:
+        case SUM_ALL_ROW:
             payload.cells.forEach((arr, index) => newSum[index] = arr.reduce((sum, sell) => sum + sell.amount, 0))
             return newSum
         case SUM_ROW:
