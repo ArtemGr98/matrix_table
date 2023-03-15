@@ -95,7 +95,7 @@ export const cellsReducer = (state: RowsArrT, {type, payload}: ActionCellsT) => 
             newState.splice(rowIndex, 1)
             dispatches.dispatchAveragesValue({
                 type: AVERAGE_ALL_COLUMNS,
-                payload: {cells: newState, columnCount: newState[0].length}
+                payload: {cells: newState, columnCount: newState[0]?.length}
             })
             return newState
 

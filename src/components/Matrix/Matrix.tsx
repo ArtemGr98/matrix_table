@@ -25,7 +25,7 @@ const Matrix = () => {
             payload: {
                 columnCount,
                 rowCount,
-                dispatches: {dispatchSumRow,dispatchAveragesValue}
+                dispatches: {dispatchSumRow, dispatchAveragesValue}
             }
         })
     }
@@ -42,40 +42,42 @@ const Matrix = () => {
     }
 
     return (
-        <div className="matrix">
-            <table>
-                <tbody>
-                {cells.map((row, rowIndex) => <tr className="matrix__column" key={'row' + rowIndex}>
-                    {row.map(({id, amount}, index) => {
-                        return index !== columnCount - 1 ?
-                            <td key={'col' + id}>
-                                <MatrixCell
-                                    dataCell={{id, amount}}
-                                    dispatches={{dispatchCells, dispatchSumRow, dispatchAveragesValue}}/>
-                            </td> :
-                            <td key={'col' + id} style={{display: "flex"}}>
-                                <MatrixCell
-                                    key={'col' + id} dataCell={{id, amount}}
-                                    dispatches={{dispatchCells, dispatchSumRow, dispatchAveragesValue}}/>
-                                <input type="number" className="matrix__cell" readOnly value={sumsRow[rowIndex]}/>
-                                <button onClick={() => handleDeleteRow(rowIndex)}>x
-                                </button>
-                            </td>
-                    })}
-                </tr>)}
-                <tr style={{textAlign: "start"}}>
-                    {Object.entries(averagesValue).map(([key, value], index) => <td key={"average" + index}>
-                        <input type="number"
-                               className="matrix__cell"
-                               readOnly value={value}/>
-                    </td>)}
-                </tr>
-                </tbody>
-            </table>
+        <>
+            <div className="matrix">
+                <table>
+                    <tbody>
+                    {cells.map((row, rowIndex) => <tr className="matrix__column" key={'row' + rowIndex}>
+                        {row.map(({id, amount}, index) => {
+                            return index !== columnCount - 1 ?
+                                <td key={'col' + id}>
+                                    <MatrixCell
+                                        dataCell={{id, amount}}
+                                        dispatches={{dispatchCells, dispatchSumRow, dispatchAveragesValue}}/>
+                                </td> :
+                                <td key={'col' + id} style={{display: "flex"}}>
+                                    <MatrixCell
+                                        key={'col' + id} dataCell={{id, amount}}
+                                        dispatches={{dispatchCells, dispatchSumRow, dispatchAveragesValue}}/>
+                                    <input type="number" className="matrix__cell" readOnly value={sumsRow[rowIndex]}/>
+                                    <button onClick={() => handleDeleteRow(rowIndex)}>x
+                                    </button>
+                                </td>
+                        })}
+                    </tr>)}
+                    <tr style={{textAlign: "start"}}>
+                        {Object.entries(averagesValue).map(([key, value], index) => <td key={"average" + index}>
+                            <input type="number"
+                                   className="matrix__cell"
+                                   readOnly value={value}/>
+                        </td>)}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             <button disabled={!(rowCount && columnCount)} onClick={handleAddRow}>
                 add row
             </button>
-        </div>
+        </>
     )
 }
 
