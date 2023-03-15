@@ -19,6 +19,7 @@ type ActionSumRow = {
         cells: Cell[]
     }
 }
+
 export type ActionSumRowT = ActionSumAllRow | ActionSumRow
 export const sumRowInitState: SumRowT = {0: 1}
 

@@ -13,7 +13,6 @@ function App() {
                     <InputArg minValue={0} maxValue={100} name="columnCount"/>
                     {/*<InputArg />*/}
                 </div>
-
                 <Matrix />
             </div>
         </InputsAgrContextProvider>

@@ -1,4 +1,4 @@
-import {useContext, useEffect, useReducer} from "react"
+import {memo, useContext, useEffect, useReducer} from "react"
 import {InputsAgrContext} from "../App/InputsAgrContext"
 import MatrixCell from "./MatrixCell"
 import './Matrix.scss'
@@ -6,7 +6,7 @@ import './Matrix.scss'
 import {sumRowInitState, sumRowReducer} from "./reducers/sumRowReducer"
 import {generateCellData} from "./utils"
 import {ADD_ROW, cellsInitState, cellsReducer, DELETE_ROW} from "./reducers/cellsReducer"
-import {averageInitState, averageValReducer} from "./reducers/averageValReducer";
+import {averageInitState, averageValReducer} from "./reducers/averageValReducer"
 
 const Matrix = () => {
     const [{columnCount, rowCount, closestValues}, dispatchInputsArg] = useContext(InputsAgrContext)
@@ -16,13 +16,30 @@ const Matrix = () => {
     const [averagesValue, dispatchAveragesValue] = useReducer(averageValReducer, averageInitState)
 
     useEffect(() => {
-        generateCellData(columnCount, rowCount, {dispatchCells, dispatchSumRow: dispatchSumRow, dispatchAveragesValue})
+        generateCellData(columnCount, rowCount, {dispatchCells, dispatchSumRow, dispatchAveragesValue})
     }, [columnCount, rowCount])
 
-    // useEffect(() => {
-    //     dispatchSumRows({type: "SUM_ROWS", payload: {cells}})
-    // }, [cells])
+    const handleAddRow = () => {
+        dispatchCells({
+            type: ADD_ROW,
+            payload: {
+                columnCount,
+                rowCount,
+                dispatches: {dispatchSumRow,dispatchAveragesValue}
+            }
+        })
+    }
 
+    const handleDeleteRow = (rowIndex: number) => {
+        dispatchCells({
+            type: DELETE_ROW,
+            payload: {
+                rowIndex,
+                rowCount,
+                dispatches: {dispatchAveragesValue}
+            }
+        })
+    }
 
     return (
         <div className="matrix">
@@ -41,14 +58,7 @@ const Matrix = () => {
                                     key={'col' + id} dataCell={{id, amount}}
                                     dispatches={{dispatchCells, dispatchSumRow, dispatchAveragesValue}}/>
                                 <input type="number" className="matrix__cell" readOnly value={sumsRow[rowIndex]}/>
-                                <button onClick={() => dispatchCells(
-                                    {
-                                        type: DELETE_ROW,
-                                        payload: {
-                                            rowIndex,
-                                            dispatches: {dispatchAveragesValue}
-                                        }
-                                    })}>x
+                                <button onClick={() => handleDeleteRow(rowIndex)}>x
                                 </button>
                             </td>
                     })}
@@ -62,21 +72,11 @@ const Matrix = () => {
                 </tr>
                 </tbody>
             </table>
-            <button disabled={!(rowCount && columnCount)} onClick={() =>
-                dispatchCells({
-                    type: ADD_ROW,
-                    payload: {
-                        columnCount: columnCount,
-                        dispatches: {
-                            dispatchSumRow,
-                            dispatchAveragesValue
-                        }
-                    }
-                })}>add row
+            <button disabled={!(rowCount && columnCount)} onClick={handleAddRow}>
+                add row
             </button>
-
         </div>
     )
 }
 
-export default Matrix
+export default memo(Matrix)

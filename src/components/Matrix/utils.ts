@@ -1,5 +1,5 @@
 import {Dispatch} from "react";
-import {ActionCellsT, ADD_ROWS, Cell, RowsArrT} from "./reducers/cellsReducer";
+import {ActionCellsT, ADD_ROWS, CellArrT, RowsArrT} from "./reducers/cellsReducer";
 import {ActionSumRowT, SUM_ALL_ROW} from "./reducers/sumRowReducer";
 import {ActionAverageValueT, AVERAGE_ALL_COLUMNS} from "./reducers/averageValReducer";
 
@@ -15,11 +15,11 @@ export const generateCellData = (
 ) => {
 
     const totalRowArr = Array.from({length: row}, (_, i) => i)
-
     const cellArr: RowsArrT = []
 
     totalRowArr.forEach(rowIndex => {
-        cellArr.push(generateRow(column))
+        const lastId = rowIndex * column
+        cellArr.push(generateRow(column, lastId))
     })
 
     const {dispatchCells, dispatchAveragesValue, dispatchSumRow} = dispatches
@@ -29,13 +29,9 @@ export const generateCellData = (
     dispatchAveragesValue({type: AVERAGE_ALL_COLUMNS, payload: {cells: cellArr, columnCount: column}})
 }
 
-export function generateRow(columnCount: number) {
-    const totalCellCount = Array.from({length: columnCount}, (_, i) => i)
-    return  [...totalCellCount.map(id => {
-        const randomNumber = Math.floor(Math.random() * 900) + 100
-        const CellObj: Cell = {
-            id, amount: randomNumber
-        }
-        return CellObj
-    })]
+export function generateRow(columnCount: number, lastId: number): CellArrT {
+    const totalCellCount = Array.from({length: columnCount}, (_, i) => i + lastId)
+    return  [...totalCellCount.map(id => ({
+        id, amount: Math.floor(Math.random() * 900) + 100
+    }))]
 }

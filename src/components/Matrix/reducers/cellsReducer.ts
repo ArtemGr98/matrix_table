@@ -1,7 +1,7 @@
-import {Dispatch} from "react";
-import {ActionSumRowT, SUM_ROW} from "./sumRowReducer";
-import {ActionAverageValueT, AVERAGE_ALL_COLUMNS, AVERAGE_COLUMN} from "./averageValReducer";
-import {generateRow} from "../utils";
+import {Dispatch} from "react"
+import {ActionSumRowT, SUM_ALL_ROW, SUM_ROW} from "./sumRowReducer"
+import {ActionAverageValueT, AVERAGE_ALL_COLUMNS, AVERAGE_COLUMN} from "./averageValReducer"
+import {generateRow} from "../utils"
 
 export const ADD_ROWS = "ADD_ROWS"
 export const INCREMENT_CELL_AMOUNT = "INCREMENT_CELL_AMOUNT"
@@ -12,7 +12,7 @@ export type Cell = {
     id: number,
     amount: number
 }
-
+export type CellArrT = Cell[]
 export type RowsArrT = Cell[][]
 
 export type ActionAddRows = {
@@ -33,6 +33,7 @@ export type ActionDeleteRow = {
     type: typeof DELETE_ROW,
     payload: {
         rowIndex: number,
+        rowCount: number,
         dispatches: {
             dispatchAveragesValue: Dispatch<ActionAverageValueT>
         }
@@ -41,34 +42,33 @@ export type ActionDeleteRow = {
 export type ActionAddRow = {
     type: typeof ADD_ROW,
     payload: {
-        columnCount: number
+        columnCount: number,
+        rowCount: number,
         dispatches: {
             dispatchAveragesValue: Dispatch<ActionAverageValueT>,
             dispatchSumRow: Dispatch<ActionSumRowT>
         }
     }
 }
+
 export type ActionCellsT = ActionAddRows | ActionIncrementCellAmount | ActionDeleteRow | ActionAddRow
-
-
 export const cellsInitState: RowsArrT = [[{id: 0, amount: 0}]]
 
 export const cellsReducer = (state: RowsArrT, {type, payload}: ActionCellsT) => {
     const newState = [...state]
 
-
     switch (type) {
         case ADD_ROWS:
             return payload
 
-        case INCREMENT_CELL_AMOUNT: {
+        case INCREMENT_CELL_AMOUNT:
             const {dispatchAveragesValue, dispatchSumRow} = payload.dispatches
             const {id, amount} = payload.cell
 
-            const rowIndex = state.findIndex((row) => row.some((cell) => cell.id === id))
+            const rowIndex1 = state.findIndex((row) => row.some((cell) => cell.id === id))
             let columnIndex = 0
 
-            const cellIndex = state[rowIndex].findIndex(
+            const cellIndex = state[rowIndex1].findIndex(
                 (cell, index) => {
                     if (cell.id === id) {
                         columnIndex = index
@@ -78,28 +78,35 @@ export const cellsReducer = (state: RowsArrT, {type, payload}: ActionCellsT) => 
                 }
             )
 
-            newState[rowIndex] = [...state[rowIndex]]
+            newState[rowIndex1] = [...state[rowIndex1]]
 
-            newState[rowIndex][cellIndex] = {
-                ...newState[rowIndex][cellIndex],
+            newState[rowIndex1][cellIndex] = {
+                ...newState[rowIndex1][cellIndex],
                 amount,
             }
 
-            dispatchSumRow({type: SUM_ROW, payload: {id: rowIndex, cells: newState[rowIndex]}})
+            dispatchSumRow({type: SUM_ROW, payload: {id: rowIndex1, cells: newState[rowIndex1]}})
             dispatchAveragesValue({type: AVERAGE_COLUMN, payload: {cells: newState, columnCount: columnIndex}})
-        }
+
             return newState
 
         case DELETE_ROW:
             const {rowIndex, dispatches} = payload
             newState.splice(rowIndex, 1)
-            dispatches.dispatchAveragesValue({type: AVERAGE_ALL_COLUMNS, payload: {cells: newState, columnCount: newState[0].length}})
-            // dispatches.dispatchInputsArg({})
+            dispatches.dispatchAveragesValue({
+                type: AVERAGE_ALL_COLUMNS,
+                payload: {cells: newState, columnCount: newState[0].length}
+            })
             return newState
 
         case ADD_ROW:
-            newState.push(generateRow(payload.columnCount))
-            // dispatchAveragesValue({type: })
+            const lastId = state.at(-1)?.at(-1)?.id || 0
+            newState.push(generateRow(payload.columnCount, lastId + 1))
+            payload.dispatches.dispatchAveragesValue({
+                type: AVERAGE_ALL_COLUMNS,
+                payload: {cells: newState, columnCount: newState[0].length}
+            })
+            payload.dispatches.dispatchSumRow({type: SUM_ALL_ROW, payload: {cells: newState}})
             return newState
 
         default:
