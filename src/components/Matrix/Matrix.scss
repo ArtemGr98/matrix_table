@@ -1,0 +1,13 @@
+.matrix {
+  overflow: auto;
+  padding: 5%;
+  &__column {
+    //display: flex;
+    //flex-direction: column;
+  }
+  &__cell {
+    width: 100px;
+    height: 20px;
+    cursor: pointer;
+  }
+}
