@@ -1,4 +1,4 @@
-import {memo, useContext, useEffect, useReducer} from "react"
+import {useContext, useEffect, useReducer} from "react"
 import {InputsAgrContext} from "../App/InputsAgrContext"
 import MatrixCell from "./MatrixCell"
 import './Matrix.scss'
@@ -45,40 +45,43 @@ const Matrix = () => {
         <>
             <div className="matrix">
                 <table>
+                    <thead>
+                    <tr>
+                        <th></th>
+                        {Array.from({length: columnCount}, (_, i) => i).map(item =>
+                            <th key={"col" + item}>col {item}</th>)
+                        }
+                        <th>sum</th>
+                    </tr>
+                    </thead>
                     <tbody>
-                    {cells.map((row, rowIndex) => <tr className="matrix__column" key={'row' + rowIndex}>
-                        {row.map(({id, amount}, index) => {
-                            return index !== columnCount - 1 ?
-                                <td key={'col' + id}>
-                                    <MatrixCell
-                                        dataCell={{id, amount}}
-                                        dispatches={{dispatchCells, dispatchSumRow, dispatchAveragesValue}}/>
-                                </td> :
-                                <td key={'col' + id} style={{display: "flex"}}>
-                                    <MatrixCell
-                                        key={'col' + id} dataCell={{id, amount}}
-                                        dispatches={{dispatchCells, dispatchSumRow, dispatchAveragesValue}}/>
-                                    <input type="number" className="matrix__cell" readOnly value={sumsRow[rowIndex]}/>
-                                    <button onClick={() => handleDeleteRow(rowIndex)}>x
-                                    </button>
-                                </td>
-                        })}
+                    {cells.map((row, rowIndex) => <tr key={'row' + rowIndex}>
+                        <th>row {rowIndex}</th>
+                        {row.map(({id, amount}) => <MatrixCell key={"col" + id}
+                            dataCell={{id, amount}}
+                            dispatches={{dispatchCells, dispatchSumRow, dispatchAveragesValue}}/>)}
+                        <td key={'sum' + rowIndex}>
+                            {sumsRow[rowIndex]}
+                        </td>
+                        <button onClick={() => handleDeleteRow(rowIndex)}>
+                            x
+                        </button>
                     </tr>)}
-                    <tr style={{textAlign: "start"}}>
+                    <tr>
+                        <th>Average values</th>
                         {Object.entries(averagesValue).map(([key, value], index) => <td key={"average" + index}>
-                            <input type="number"
-                                   className="matrix__cell"
-                                   readOnly value={value}/>
+                            {value}
                         </td>)}
+                        <th></th>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <button disabled={!(rowCount && columnCount)} onClick={handleAddRow}>
+            <button disabled={!(rowCount && columnCount) || cells.length === 100} onClick={handleAddRow}>
                 add row
             </button>
         </>
     )
 }
 
-export default memo(Matrix)
+export default Matrix

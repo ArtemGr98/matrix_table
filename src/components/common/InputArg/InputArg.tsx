@@ -1,5 +1,6 @@
 import {ChangeEvent, FC, useContext} from "react"
 import {ArgT, InputsAgrContext} from "../../App/InputsAgrContext"
+import './InputArg.scss'
 
 type InputArgPropsT = {
     minValue: number,
@@ -17,6 +18,7 @@ const InputArg: FC<InputArgPropsT> = ({minValue, maxValue, name}) => {
 
     return <div>
         <label htmlFor={name}>{name}</label>
+        <br/>
         <input type="number" id={name} name={name} value={args[name] || ''} onChange={(event => handleChangeValue(event))} />
     </div>
 }

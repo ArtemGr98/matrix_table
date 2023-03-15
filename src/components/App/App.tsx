@@ -8,7 +8,7 @@ function App() {
     return (
         <InputsAgrContextProvider>
             <div className="App">
-                <div>
+                <div style={{display: "flex"}}>
                     <InputArg minValue={0} maxValue={100} name="rowCount"/>
                     <InputArg minValue={0} maxValue={100} name="columnCount"/>
                     {/*<InputArg />*/}

@@ -27,7 +27,7 @@ const MatrixCell: FC<MatrixCellPropsT> = memo(({dataCell, dispatches}) => {
         })
     }
 
-    return <input type="text" readOnly className="matrix__cell" value={amount} data-id={id} onClick={handleIncrementValue}/>
+    return <td onClick={handleIncrementValue}>{amount}</td>
 
 }, areEqual)
 

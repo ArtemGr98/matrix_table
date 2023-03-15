@@ -65,10 +65,10 @@ export const cellsReducer = (state: RowsArrT, {type, payload}: ActionCellsT) => 
             const {dispatchAveragesValue, dispatchSumRow} = payload.dispatches
             const {id, amount} = payload.cell
 
-            const rowIndex1 = state.findIndex((row) => row.some((cell) => cell.id === id))
+            const rowIndex = state.findIndex((row) => row.some((cell) => cell.id === id))
             let columnIndex = 0
 
-            const cellIndex = state[rowIndex1].findIndex(
+            const cellIndex = state[rowIndex].findIndex(
                 (cell, index) => {
                     if (cell.id === id) {
                         columnIndex = index
@@ -78,22 +78,21 @@ export const cellsReducer = (state: RowsArrT, {type, payload}: ActionCellsT) => 
                 }
             )
 
-            newState[rowIndex1] = [...state[rowIndex1]]
+            newState[rowIndex] = [...state[rowIndex]]
 
-            newState[rowIndex1][cellIndex] = {
-                ...newState[rowIndex1][cellIndex],
+            newState[rowIndex][cellIndex] = {
+                ...newState[rowIndex][cellIndex],
                 amount,
             }
 
-            dispatchSumRow({type: SUM_ROW, payload: {id: rowIndex1, cells: newState[rowIndex1]}})
+            dispatchSumRow({type: SUM_ROW, payload: {id: rowIndex, cells: newState[rowIndex]}})
             dispatchAveragesValue({type: AVERAGE_COLUMN, payload: {cells: newState, columnCount: columnIndex}})
 
             return newState
 
         case DELETE_ROW:
-            const {rowIndex, dispatches} = payload
-            newState.splice(rowIndex, 1)
-            dispatches.dispatchAveragesValue({
+            newState.splice(payload.rowIndex, 1)
+            payload.dispatches.dispatchAveragesValue({
                 type: AVERAGE_ALL_COLUMNS,
                 payload: {cells: newState, columnCount: newState[0]?.length}
             })

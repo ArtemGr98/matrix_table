@@ -10,23 +10,23 @@ export type DispatchesT = {
 }
 
 export const generateCellData = (
-    column: number, row: number,
+    columnCount: number, rowCount: number,
     dispatches: DispatchesT
 ) => {
 
-    const totalRowArr = Array.from({length: row}, (_, i) => i)
+    const totalRowArr = Array.from({length: rowCount}, (_, i) => i)
     const cellArr: RowsArrT = []
 
     totalRowArr.forEach(rowIndex => {
-        const lastId = rowIndex * column
-        cellArr.push(generateRow(column, lastId))
+        const lastId = rowIndex * columnCount
+        cellArr.push(generateRow(columnCount, lastId))
     })
 
     const {dispatchCells, dispatchAveragesValue, dispatchSumRow} = dispatches
 
     dispatchCells({type: ADD_ROWS, payload: cellArr})
     dispatchSumRow({type: SUM_ALL_ROW, payload: {cells: cellArr}})
-    dispatchAveragesValue({type: AVERAGE_ALL_COLUMNS, payload: {cells: cellArr, columnCount: column}})
+    dispatchAveragesValue({type: AVERAGE_ALL_COLUMNS, payload: {cells: cellArr, columnCount: columnCount}})
 }
 
 export function generateRow(columnCount: number, lastId: number): CellArrT {

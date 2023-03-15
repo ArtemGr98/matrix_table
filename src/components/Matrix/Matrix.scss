@@ -1,13 +1,16 @@
 .matrix {
   overflow: auto;
-  padding: 5%;
-  &__column {
-    //display: flex;
-    //flex-direction: column;
+  padding: 2% 0;
+
+  th, td {
+    text-align: start;
+    border: 1px solid lightblue;
+    width: 120px;
+    min-width: 120px;
+    height: 30px;
+    padding: 2px 5px;
   }
-  &__cell {
-    width: 100px;
-    height: 20px;
+  td {
     cursor: pointer;
   }
 }
