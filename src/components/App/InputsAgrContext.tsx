@@ -3,10 +3,10 @@ import {createContext, Dispatch, FC, ReactNode, useReducer} from "react"
 type InputsAgrT = {
     columnCount: number,
     rowCount: number,
-    closestValues: number
+    closestCount: number
 }
 
-export type ArgT = "columnCount" | "rowCount" | "closestValues"
+export type ArgT = "columnCount" | "rowCount" | "closestCount"
 
 export type ActionInputsAgrT = {
     type: ArgT,
@@ -16,7 +16,7 @@ export type ActionInputsAgrT = {
 const inputsAgrInitValue: InputsAgrT = {
     columnCount: 0,
     rowCount: 0,
-    closestValues: 0
+    closestCount: 0
 }
 type InputsAgrContextProviderT = {
     children: ReactNode

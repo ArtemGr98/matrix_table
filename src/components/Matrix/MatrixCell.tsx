@@ -1,18 +1,20 @@
 import './Matrix.scss'
-import {FC, memo} from "react"
-import {Cell, INCREMENT_CELL_AMOUNT} from "./reducers/cellsReducer"
+import React, {ChangeEvent, FC, memo} from "react"
+import {Cell, CellArrT, INCREMENT_CELL_AMOUNT} from "./reducers/cellsReducer"
 import {DispatchesT} from "./utils";
 
 type MatrixCellPropsT = {
     dataCell: Cell,
-    dispatches: DispatchesT
+    amountNearest: CellArrT,
+    dispatches: DispatchesT,
+    handleAmountNearest: (e: React.MouseEvent<HTMLTableDataCellElement>) => void
 }
 
 const areEqual = (prevProps: MatrixCellPropsT, nextProps: MatrixCellPropsT) => {
     return prevProps.dataCell.amount === nextProps.dataCell.amount
 }
 
-const MatrixCell: FC<MatrixCellPropsT> = memo(({dataCell, dispatches}) => {
+const MatrixCell: FC<MatrixCellPropsT> = ({dataCell, dispatches, handleAmountNearest, amountNearest}) => {
 
     const {id, amount} = dataCell
 
@@ -27,8 +29,11 @@ const MatrixCell: FC<MatrixCellPropsT> = memo(({dataCell, dispatches}) => {
         })
     }
 
-    return <td onClick={handleIncrementValue}>{amount}</td>
+    return <td onClick={handleIncrementValue} id={id.toString()}
+               style={{backgroundColor: `${amountNearest.find(cell => cell.id === id) ? 'lightblue': ''}`}}
+               onMouseEnter={(e) =>
+                   handleAmountNearest(e)}>{amount}</td>
 
-}, areEqual)
+}
 
-export default MatrixCell
+export default memo(MatrixCell)
