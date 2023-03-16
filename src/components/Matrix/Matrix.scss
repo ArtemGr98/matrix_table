@@ -13,6 +13,18 @@
   td {
     cursor: pointer;
     transition: all .3s;
+    &:hover {
+      background-color: aquamarine;
+    }
+  }
 
+  &__sum {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    button {
+      border: none;
+      cursor: pointer;
+    }
   }
 }

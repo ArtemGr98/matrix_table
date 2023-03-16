@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useContext, useEffect, useReducer, useState} from "react"
+import React, {useCallback, useContext, useEffect, useMemo, useReducer, useState} from "react"
 import {InputsAgrContext} from "../App/InputsAgrContext"
 import MatrixCell from "./MatrixCell"
 import './Matrix.scss'
@@ -15,7 +15,9 @@ const Matrix = () => {
     const [cells, dispatchCells] = useReducer(cellsReducer, cellsInitState)
     const [sumsRow, dispatchSumRow] = useReducer(sumRowReducer, sumRowInitState)
     const [averagesValue, dispatchAveragesValue] = useReducer(averageValReducer, averageInitState)
+
     const [amountNearest, setAmountNearest] = useState<CellArrT>([])
+    const [cellPercent, setCellPercent] = useState<{[index: number]: number[]}>({})
 
     useEffect(() => {
         generateCellData(columnCount, rowCount, {dispatchCells, dispatchSumRow, dispatchAveragesValue})
@@ -44,14 +46,33 @@ const Matrix = () => {
     }
 
     const handleAmountNearest = (e: React.MouseEvent<HTMLTableDataCellElement>) => {
-        const id = e.currentTarget.id
-        const currentCell = cells.find(row => row.find(cell => cell.id === +id))?.find(cell => cell.id === +id)
         const state = cells.flat()
+        const id = e.currentTarget.id
+        const currentCell = state.find(cell => cell.id === +id)
+        const indexCell = state.findIndex(cell => cell.id === +id)
+        state.splice(indexCell, 1)
 
         if (currentCell) {
             state.sort((a, b) => Math.abs(a.amount - currentCell.amount) - Math.abs(b.amount - currentCell.amount))
-            setAmountNearest(state.slice(0, closestCount + 1))
+            setAmountNearest(state.slice(0, closestCount))
         }
+    }
+
+    const handleCellPercent = (e: React.MouseEvent<HTMLTableDataCellElement>) => {
+
+        const rowIndex = +e.currentTarget.id
+        const sum = e.currentTarget.dataset.sum
+        const currentRow = [...cells][rowIndex]
+
+        const percentArr: number[] = []
+        if (sum) {
+            currentRow.forEach(cell => {
+                const percent = +(cell.amount / +sum * 100).toFixed(2)
+                percentArr.push(percent)
+            })
+        }
+
+        setCellPercent({[rowIndex]: percentArr})
     }
 
     return (
@@ -71,17 +92,21 @@ const Matrix = () => {
                     <tbody>
                     {cells.map((row, rowIndex) => <tr key={'row' + rowIndex} onMouseLeave={() => setAmountNearest([])}>
                         <th>row {rowIndex}</th>
-                        {row.map(({id, amount}) => <MatrixCell
+                        {row.map(({id, amount}, cellIndex) => <MatrixCell
                             key={"col" + id}
                             handleAmountNearest={handleAmountNearest}
                             dataCell={{id, amount}}
-                            amountNearest={amountNearest}
+                            amountNearest={amountNearest.find(cell => cell.id === id) ? true : false }
+                            cellPercent={cellPercent[rowIndex] ? cellPercent[rowIndex][cellIndex] : null}
                             dispatches={{
                                 dispatchCells,
                                 dispatchSumRow,
                                 dispatchAveragesValue
                             }}/>)}
-                        <td key={'sum' + rowIndex}>
+                        <td key={'sum' + rowIndex} id={rowIndex.toString()} data-sum={sumsRow[rowIndex]}
+                            className="matrix__sum"
+                            onMouseEnter={handleCellPercent}
+                            onMouseLeave={() => setCellPercent({})}>
                             <span>
                                 {sumsRow[rowIndex]}
                             </span>

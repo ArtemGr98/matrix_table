@@ -14,9 +14,9 @@ export type ActionInputsAgrT = {
 }
 
 const inputsAgrInitValue: InputsAgrT = {
-    columnCount: 0,
-    rowCount: 0,
-    closestCount: 0
+    columnCount: 4,
+    rowCount: 4,
+    closestCount: 3
 }
 type InputsAgrContextProviderT = {
     children: ReactNode
