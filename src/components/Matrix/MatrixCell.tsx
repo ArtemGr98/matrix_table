@@ -19,7 +19,15 @@ const areEqual = (prevProps: MatrixCellPropsT, nextProps: MatrixCellPropsT) => {
         && prevProps.closestValuesCount === nextProps.closestValuesCount
 }
 
-const MatrixCell: FC<MatrixCellPropsT> = ({dataCell, dispatches, handleAmountNearest, amountNearest, cellPercent, closestValuesCount}) => {
+const MatrixCell: FC<MatrixCellPropsT> = (
+    {
+        dataCell,
+        dispatches,
+        handleAmountNearest,
+        amountNearest,
+        cellPercent,
+        closestValuesCount
+    }) => {
 
     const {id, amount} = dataCell
 
@@ -35,7 +43,7 @@ const MatrixCell: FC<MatrixCellPropsT> = ({dataCell, dispatches, handleAmountNea
     }
 
     return <td onClick={handleIncrementValue} id={id.toString()}
-               style={{backgroundColor: `${amountNearest ? 'lightblue' : ''}`}}
+               className={`matrix__cell ${cellPercent ? "cell_percent" : amountNearest ? "amount_nearest" : ""}`}
                onMouseEnter={(e) =>
                    handleAmountNearest(e, closestValuesCount)}>
 

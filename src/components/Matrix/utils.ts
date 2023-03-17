@@ -27,7 +27,6 @@ export const generateCellData = (
     dispatchCells({type: ADD_ROWS, payload: cellArr})
     dispatchSumRow({type: SUM_ALL_ROW, payload: {cells: cellArr}})
     dispatchAveragesValue({type: AVERAGE_ALL_COLUMNS, payload: {cells: cellArr, columnCount: columnCount}})
-
 }
 
 export function generateRow(columnCount: number, lastId: number): CellArrT {

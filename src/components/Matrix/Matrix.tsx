@@ -83,7 +83,12 @@ const Matrix = () => {
 
     return (
         <>
-            <InputArg minValue={0} maxValue={columnCount * rowCount} name="closestValuesCount"/>
+            <div style={{display: "flex"}}>
+                <InputArg minValue={0} maxValue={100} name="rowCount"/>
+                <InputArg minValue={0} maxValue={100} name="columnCount"/>
+                <InputArg minValue={0} maxValue={columnCount * rowCount} name="closestValuesCount"/>
+            </div>
+
             <div className="matrix">
                 <table>
                     <thead>
@@ -111,6 +116,7 @@ const Matrix = () => {
                                 dispatchAveragesValue
                             }}/>)}
                         <td key={'sum' + row[0].id}
+                            onMouseEnter={() => setClosestValues([])}
                             className="matrix__sum">
                             <div id={row[0].id.toString()} data-row-index={rowIndex} data-sum={sumsRow[row[0].id]}
                                  style={{width: "100%"}}
@@ -130,9 +136,8 @@ const Matrix = () => {
                         {Object.entries(averagesValue).map(([key, value]) => <td key={"average" + key}>
                             {value}
                         </td>)}
-                        <th style={{padding: "0"}}>
+                        <th className="add_row">
                             <button
-                                style={{width: "100%", height: "100%", border: "none", cursor: "pointer"}}
                                 disabled={!(rowCount && columnCount) || cells.length === 100}
                                     onClick={handleAddRow}>
                               ADD ROW
