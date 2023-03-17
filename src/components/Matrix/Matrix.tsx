@@ -7,7 +7,7 @@ import {sumRowInitState, sumRowReducer} from "./reducers/sumRowReducer"
 import {generateCellData} from "./utils"
 import {ADD_ROW, CellArrT, cellsInitState, cellsReducer, DELETE_ROW} from "./reducers/cellsReducer"
 import {averageInitState, averageValReducer} from "./reducers/averageValReducer"
-import InputArg from "../InputArg/InputArg";
+import InputArg from "../InputArg/InputArg"
 
 const Matrix = () => {
     const [{columnCount, rowCount, closestValuesCount}] = useContext(InputsAgrContext)
@@ -130,14 +130,18 @@ const Matrix = () => {
                         {Object.entries(averagesValue).map(([key, value]) => <td key={"average" + key}>
                             {value}
                         </td>)}
-                        <th></th>
+                        <th style={{padding: "0"}}>
+                            <button
+                                style={{width: "100%", height: "100%", border: "none", cursor: "pointer"}}
+                                disabled={!(rowCount && columnCount) || cells.length === 100}
+                                    onClick={handleAddRow}>
+                              ADD ROW
+                            </button>
+                        </th>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <button disabled={!(rowCount && columnCount) || cells.length === 100} onClick={handleAddRow}>
-                add row
-            </button>
         </>
     )
 }
