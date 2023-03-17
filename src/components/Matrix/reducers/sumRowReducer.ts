@@ -24,15 +24,19 @@ export type ActionSumRowT = ActionSumAllRow | ActionSumRow
 export const sumRowInitState: SumRowT = {0: 1}
 
 export const sumRowReducer = (state: SumRowT, {type, payload}: ActionSumRowT) => {
-    const newSum: SumRowT = {...state}
-
+    let newSum: SumRowT = {}
     switch (type) {
         case SUM_ALL_ROW:
-            payload.cells.forEach((arr, index) => newSum[index] = arr.reduce((sum, sell) => sum + sell.amount, 0))
+            if (payload.cells.length) {
+                payload.cells.forEach((arr, index) => newSum[arr[0].id] = arr.reduce((sum, sell) => sum + sell.amount, 0))
+            }
+
             return newSum
         case SUM_ROW:
+            newSum = {...state}
             newSum[payload.id] = payload.cells.reduce((sum, sell) => sum + sell.amount, 0)
             return newSum
+
         default:
             return state
     }

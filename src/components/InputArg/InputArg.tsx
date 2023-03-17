@@ -1,5 +1,5 @@
 import {ChangeEvent, FC, useContext} from "react"
-import {ArgT, InputsAgrContext} from "../../App/InputsAgrContext"
+import {ArgT, InputsAgrContext} from "../App/InputsAgrContext"
 import './InputArg.scss'
 
 type InputArgPropsT = {
@@ -13,7 +13,16 @@ const InputArg: FC<InputArgPropsT> = ({minValue, maxValue, name}) => {
 
     const handleChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = +e.target.value
-        newValue <= maxValue ? dispatch({type: name, payload: newValue}) : dispatch({type: name, payload: maxValue})
+        if (newValue <= maxValue && newValue >= 0) {
+            dispatch({type: name, payload: newValue})
+        }
+        else if (newValue > maxValue) {
+            dispatch({type: name, payload: maxValue})
+        }
+        else {
+            dispatch({type: name, payload: 0})
+        }
+        //newValue <= maxValue ? dispatch({type: name, payload: newValue}) : dispatch({type: name, payload: maxValue})
     }
 
     return <div>

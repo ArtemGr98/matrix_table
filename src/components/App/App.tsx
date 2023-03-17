@@ -1,5 +1,5 @@
 import './App.css'
-import InputArg from "../common/InputArg/InputArg"
+import InputArg from "../InputArg/InputArg"
 import InputsAgrContextProvider from "./InputsAgrContext"
 import Matrix from "../Matrix/Matrix";
 

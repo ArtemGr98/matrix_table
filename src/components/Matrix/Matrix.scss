@@ -25,6 +25,10 @@
     button {
       border: none;
       cursor: pointer;
+      transition: all .3s;
+      &:hover {
+        transform: scale(1.2);
+      }
     }
   }
 }

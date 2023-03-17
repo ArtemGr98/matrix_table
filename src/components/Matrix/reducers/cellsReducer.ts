@@ -85,13 +85,14 @@ export const cellsReducer = (state: RowsArrT, {type, payload}: ActionCellsT) => 
                 amount,
             }
 
-            dispatchSumRow({type: SUM_ROW, payload: {id: rowIndex, cells: newState[rowIndex]}})
+            dispatchSumRow({type: SUM_ROW, payload: {id: newState[rowIndex][0].id, cells: newState[rowIndex]}})
             dispatchAveragesValue({type: AVERAGE_COLUMN, payload: {cells: newState, columnCount: columnIndex}})
 
             return newState
 
         case DELETE_ROW:
             newState.splice(payload.rowIndex, 1)
+
             payload.dispatches.dispatchAveragesValue({
                 type: AVERAGE_ALL_COLUMNS,
                 payload: {cells: newState, columnCount: newState[0]?.length}
@@ -109,6 +110,6 @@ export const cellsReducer = (state: RowsArrT, {type, payload}: ActionCellsT) => 
             return newState
 
         default:
-            return state
+            return newState
     }
 }

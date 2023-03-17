@@ -8,16 +8,18 @@ type MatrixCellPropsT = {
     cellPercent: number | null,
     amountNearest: boolean,
     dispatches: DispatchesT,
-    handleAmountNearest: (e: React.MouseEvent<HTMLTableDataCellElement>) => void
+    closestValuesCount: number
+    handleAmountNearest: (e: React.MouseEvent<HTMLTableDataCellElement>, count: number) => void
 }
 
 const areEqual = (prevProps: MatrixCellPropsT, nextProps: MatrixCellPropsT) => {
     return prevProps.dataCell.amount === nextProps.dataCell.amount
         && prevProps.cellPercent === nextProps.cellPercent
         && prevProps.amountNearest === nextProps.amountNearest
+        && prevProps.closestValuesCount === nextProps.closestValuesCount
 }
 
-const MatrixCell: FC<MatrixCellPropsT> = ({dataCell, dispatches, handleAmountNearest, amountNearest, cellPercent}) => {
+const MatrixCell: FC<MatrixCellPropsT> = ({dataCell, dispatches, handleAmountNearest, amountNearest, cellPercent, closestValuesCount}) => {
 
     const {id, amount} = dataCell
 
@@ -35,10 +37,9 @@ const MatrixCell: FC<MatrixCellPropsT> = ({dataCell, dispatches, handleAmountNea
     return <td onClick={handleIncrementValue} id={id.toString()}
                style={{backgroundColor: `${amountNearest ? 'lightblue' : ''}`}}
                onMouseEnter={(e) =>
-                   handleAmountNearest(e)}>
+                   handleAmountNearest(e, closestValuesCount)}>
 
-        {amount}
-        {cellPercent && ' → ' + cellPercent + "%"}
+        {cellPercent ? cellPercent + "%" : amount}
     </td>
 
 }
