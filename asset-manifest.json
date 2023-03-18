@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/memcrab_test/static/css/main.119b70ea.css",
-    "main.js": "/memcrab_test/static/js/main.f323ba99.js",
+    "main.css": "/memcrab_test/static/css/main.58dc5570.css",
+    "main.js": "/memcrab_test/static/js/main.8a0fa9f1.js",
     "static/js/787.afd6c76a.chunk.js": "/memcrab_test/static/js/787.afd6c76a.chunk.js",
     "index.html": "/memcrab_test/index.html",
-    "main.119b70ea.css.map": "/memcrab_test/static/css/main.119b70ea.css.map",
-    "main.f323ba99.js.map": "/memcrab_test/static/js/main.f323ba99.js.map",
+    "main.58dc5570.css.map": "/memcrab_test/static/css/main.58dc5570.css.map",
+    "main.8a0fa9f1.js.map": "/memcrab_test/static/js/main.8a0fa9f1.js.map",
     "787.afd6c76a.chunk.js.map": "/memcrab_test/static/js/787.afd6c76a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.119b70ea.css",
-    "static/js/main.f323ba99.js"
+    "static/css/main.58dc5570.css",
+    "static/js/main.8a0fa9f1.js"
   ]
 }
