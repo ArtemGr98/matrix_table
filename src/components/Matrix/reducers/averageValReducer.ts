@@ -16,7 +16,7 @@ export type ActionAverageValueT = {
 }
 export const averageInitState: AverageValuesT = {0: 0}
 
-export const averageValReducer = (state: AverageValuesT, {type, payload}: ActionAverageValueT) => {
+const averageValReducer = (state: AverageValuesT, {type, payload}: ActionAverageValueT) => {
 
     let newAverage: AverageValuesT = {}
     const {columnCount, cells} = payload
@@ -46,3 +46,5 @@ export const averageValReducer = (state: AverageValuesT, {type, payload}: Action
             return state
     }
 }
+
+export default averageValReducer

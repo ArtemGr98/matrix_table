@@ -54,7 +54,7 @@ export type ActionAddRow = {
 export type ActionCellsT = ActionAddRows | ActionIncrementCellAmount | ActionDeleteRow | ActionAddRow
 export const cellsInitState: RowsArrT = [[{id: 0, amount: 0}]]
 
-export const cellsReducer = (state: RowsArrT, {type, payload}: ActionCellsT) => {
+const cellsReducer = (state: RowsArrT, {type, payload}: ActionCellsT) => {
     const newState = [...state]
 
     switch (type) {
@@ -113,3 +113,5 @@ export const cellsReducer = (state: RowsArrT, {type, payload}: ActionCellsT) => 
             return newState
     }
 }
+
+export default cellsReducer

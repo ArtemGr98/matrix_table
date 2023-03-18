@@ -41,3 +41,5 @@ export const sumRowReducer = (state: SumRowT, {type, payload}: ActionSumRowT) =>
             return state
     }
 }
+
+export default sumRowReducer
