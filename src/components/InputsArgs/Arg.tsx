@@ -1,6 +1,6 @@
 import {ChangeEvent, FC} from "react"
 import './InputsArgs.scss'
-import {ArgT} from "../Matrix/reducers/reducerInputsArgs";
+import {ArgT} from "./reducerInputsArgs";
 
 type InputArgPropsT = {
     maxValue: number,

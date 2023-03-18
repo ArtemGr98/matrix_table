@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useContext} from 'react';
 import Arg from "./Arg";
-import {ArgT} from "../Matrix/reducers/reducerInputsArgs";
+import {ArgT} from "./reducerInputsArgs";
 import {InputsArgsContext} from "./InputsArgsContext";
 
 const InputsArgs = () => {

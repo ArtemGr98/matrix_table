@@ -1,15 +1,18 @@
 import './App.css'
-import InputsAgrContextProvider from "./InputsAgrContext"
+
 import Matrix from "../Matrix/Matrix";
+import InputsArgs from "../InputsArgs/InputsArgs";
+import InputsArgsContextProvider from "../InputsArgs/InputsArgsContext";
 
 function App() {
 
     return (
-        <InputsAgrContextProvider>
+        <InputsArgsContextProvider>
             <div className="App">
+                <InputsArgs />
                 <Matrix />
             </div>
-        </InputsAgrContextProvider>
+        </ InputsArgsContextProvider>
     )
 }
 

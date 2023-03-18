@@ -1,16 +1,15 @@
 import React, {useContext, useEffect, useReducer, useState} from "react"
-import {InputsAgrContext} from "../App/InputsAgrContext"
 import MatrixCell from "./MatrixCell"
 import './Matrix.scss'
 
 import {sumRowInitState, sumRowReducer} from "./reducers/sumRowReducer"
 import {generateCellData} from "./utils"
-import {ADD_ROW, CellArrT, cellsInitState, cellsReducer, DELETE_ROW} from "./reducers/cellsReducer"
-import {averageInitState, averageValReducer} from "./reducers/averageValReducer"
-import InputArg from "../InputArg/InputArg"
+import cellsReducer, {ADD_ROW, CellArrT, cellsInitState, DELETE_ROW} from "./reducers/cellsReducer"
+import averageValReducer, {averageInitState} from "./reducers/averageValReducer"
+import {InputsArgsContext} from "../InputsArgs/InputsArgsContext";
 
 const Matrix = () => {
-    const [{columnCount, rowCount, closestValuesCount}] = useContext(InputsAgrContext)
+    const [{columnCount, rowCount, closestValuesCount} ] = useContext(InputsArgsContext)
 
     const [cells, dispatchCells] = useReducer(cellsReducer, cellsInitState)
     const [sumsRow, dispatchSumRow] = useReducer(sumRowReducer, sumRowInitState)
@@ -83,12 +82,6 @@ const Matrix = () => {
 
     return (
         <>
-            <div style={{display: "flex"}}>
-                <InputArg minValue={0} maxValue={100} name="rowCount"/>
-                <InputArg minValue={0} maxValue={100} name="columnCount"/>
-                <InputArg minValue={0} maxValue={columnCount * rowCount} name="closestValuesCount"/>
-            </div>
-
             <div className="matrix">
                 <table>
                     <thead>

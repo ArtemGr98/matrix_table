@@ -1,16 +1,18 @@
-import {createContext, Dispatch, FC, useReducer} from "react"
+import React, {createContext, Dispatch, FC, ReactNode, useReducer} from "react"
 import reducerInputsArgs, {
     inputsAgrInitValue,
     InputsAgrValuesT,
     ActionInputsAgrT
-} from "../Matrix/reducers/reducerInputsArgs";
-import {AppContextProviderT, DispatchInit} from "../Matrix/MatrixContext";
+} from "./reducerInputsArgs";
 
+type InputsArgsContextProviderT = {
+    children: ReactNode
+}
 type InputsArgsContextT = [InputsAgrValuesT, Dispatch<ActionInputsAgrT>]
 
-export const InputsArgsContext = createContext<InputsArgsContextT>([inputsAgrInitValue, DispatchInit])
+export const InputsArgsContext = createContext<InputsArgsContextT>([inputsAgrInitValue, () => {}])
 
-const InputsArgsContextProvider: FC<AppContextProviderT> = ({ children }) => {
+const InputsArgsContextProvider: FC<InputsArgsContextProviderT> = ({ children }) => {
 
     const [inputsArg, dispatchInputsArg] = useReducer(reducerInputsArgs, inputsAgrInitValue)
 
